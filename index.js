@@ -16,6 +16,14 @@ app.get("/", (req, res) => {
 
 app.use("/users", getUserRouter);
 
+app.use((error, req, res, next) => {
+  res.status(500).send({
+    status: "ERROR",
+    message: error.message,
+    data: error,
+  });
+});
+
 app.listen(port, (err) => {
   if (err) return console.log({ status: "ERROR", message: err.message });
 

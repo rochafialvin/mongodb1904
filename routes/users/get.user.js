@@ -2,19 +2,25 @@ require("dotenv").config();
 const router = require("express").Router();
 const client = require("../../config/database");
 
-router.get("/", async (req, res) => {
+const getUserContoller = async (req, res, next) => {
   try {
     await client.connect();
 
     const userCollection = client.db(process.env.MDB_NAME).collection("users");
-    const result = await userCollection.find().toArray();
+    const users = await userCollection.find().toArray();
 
     client.close();
 
-    res.send({ result });
+    res.send({
+      status: "SUCCESS",
+      message: "Get all data success",
+      data: users,
+    });
   } catch (error) {
-    console.log({ error });
+    next(error);
   }
-});
+};
+
+router.get("/", getUserContoller);
 
 module.exports = router;
