@@ -217,3 +217,5 @@ db.inventories.updateMany({ qty: 25 }, { $set: { status: "Sold" } });
 db.inventories.deleteOne({ qty: 25 });
 
 db.inventories.deleteOne({ _id: ObjectId("61fb4710a01d5468595461fb") });
+
+db.inventories.deleteMany({ status: "A" });
