@@ -1,0 +1,7 @@
+04/02
+
+Create 2 route :
+- Update user by id
+- Delete user by id
+
+- Setup error handler api project (mysql2)
