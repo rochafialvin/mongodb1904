@@ -1,16 +1,13 @@
 require("dotenv").config();
 const router = require("express").Router();
 const client = require("../../config/database");
+const database = process.env.MDB_NAME;
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     await client.connect();
-
-    const userCollection = client.db(process.env.MDB_NAME).collection("users");
-    const result = await userCollection.find().toArray();
-
-    client.close();
-
+    const userCollection = client.db(database).collection("users");
+    const result = await userCollection.insertOne(req.body);
     res.send({ result });
   } catch (error) {
     console.log({ error });
