@@ -1,29 +1,30 @@
 require("dotenv").config();
 const router = require("express").Router();
+const { ObjectId } = require("mongodb");
 const client = require("../../config/database");
 const database = process.env.MDB_NAME;
 
-const postUserController = async (req, res, next) => {
+const deleteUserController = async (req, res, next) => {
   try {
-    if (req.body.username.length < 8) {
-      const error = new Error("Username must be at least 8 characters");
-      return next(error);
-    }
-
     await client.connect();
+
     const userCollection = client.db(database).collection("users");
-    const response = await userCollection.insertOne(req.body);
+    const result = await userCollection.deleteOne({
+      _id: ObjectId(req.params.userid),
+    });
+
     client.close();
+
     res.send({
       status: "SUCCESS",
-      message: "New data successfully created",
-      data: response,
+      message: "User has been deleted",
+      data: result,
     });
   } catch (error) {
     next(error);
   }
 };
 
-router.post("/", postUserController);
+router.delete("/:userid", deleteUserController);
 
 module.exports = router;
